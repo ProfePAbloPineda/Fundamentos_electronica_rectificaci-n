@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Fuentes de Alimentación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .slider-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 10;
+        }
+
+        .slide.prev {
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 100px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin: 30px 0 20px 0;
+            padding-left: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        h3 {
+            color: #16a085;
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+        }
+
+        h4 {
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin: 15px 0 10px 0;
+        }
+
+        p, li {
+            color: #34495e;
+            line-height: 1.8;
+            font-size: 1em;
+        }
+
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 25px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            border: 2px dashed #667eea;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .image-caption {
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .practice-box {
+            background: linear-gradient(135deg, #e8f6f3 0%, #d1f2eb 100%);
+            border-left: 5px solid #1abc9c;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .theory-box {
+            background: linear-gradient(135deg, #fef9e7 0%, #fcf3cf 100%);
+            border-left: 5px solid #f1c40f;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        .formula {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 15px 0;
+            border: 1px solid #dee2e6;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        /* Navigation Buttons */
+        .nav-button {
+            position: fixed;
+            bottom: 30px;
+            background: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-button:active {
+            transform: translateY(-1px);
+        }
+
+        .prev-btn {
+            left: 40px;
+        }
+
+        .next-btn {
+            right: 40px;
+        }
+
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            background: rgba(255,255,255,0.95);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Scrollbar styling */
+        .slide::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 4px;
+        }
+
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.8);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+            }
+            
+            .nav-button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .prev-btn {
+                left: 20px;
+                bottom: 20px;
+            }
+            
+            .next-btn {
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #ffeaa7 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 4px;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px solid #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-counter" id="slideCounter">1 / 15</div>
+
+    <div class="slider-container">
+        
+        <!-- SLIDE 0: PORTADA -->
+        <div class="slide active">
+            <div class="content-wrapper" style="text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 80vh;">
+                <h1 style="font-size: 3em; margin-bottom: 20px;">GUÍA DE FUENTES DE ALIMENTACIÓN</h1>
+                <p class="subtitle" style="font-size: 1.3em;">Teoría y Práctica Guiada</p>
+                <div style="margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 15px;">
+                    <p style="font-size: 1.1em; margin: 10px 0;"><strong>Red Eléctrica:</strong> 220V AC, 50 Hz</p>
+                    <p style="font-size: 1.1em; margin: 10px 0;"><strong>Transformadores:</strong> 220V/12V y 220V/12V-0-12V</p>
+                </div>
+                <p style="color: #7f8c8d; margin-top: 30px;">Use las flechas ← → o los botones para navegar</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 1: INTRODUCCIÓN AL DIODO -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 0</span>
+                <h2>EL DIODO RECTIFICADOR Y SUS APLICACIONES BÁSICAS</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico del Diodo</h3>
+                    <p>El diodo es un dispositivo semiconductor que permite el flujo de corriente en una sola dirección. Está formado por la unión de un material tipo P y un material tipo N (unión PN).</p>
+                    
+                    <h4>Características principales:</h4>
+                    <ul>
+                        <li><strong>Polarización directa:</strong> El ánodo (+) se conecta al positivo y el cátodo (-) al negativo. El diodo conduce cuando V > 0.7V (silicio).</li>
+                        <li><strong>Polarización inversa:</strong> El ánodo se conecta al negativo y el cátodo al positivo. El diodo no conduce (corriente casi nula).</li>
+                        <li><strong>Voltaje de codo:</strong> 0.7V para silicio, 0.3V para germanio</li>
+                        <li><strong>Voltaje de ruptura:</strong> Voltaje máximo inverso que soporta (PIV - Peak Inverse Voltage)</li>
+                    </ul>
+
+                    <h4>Diodos comunes:</h4>
+                    <ul>
+                        <li><strong>1N4001-1N4007:</strong> Diodos rectificadores de uso general (1A, 50-1000V)</li>
+                        <li><strong>1N4148:</strong> Diodo de conmutación rápida</li>
+                        <li><strong>LED:</strong> Diodo emisor de luz (caída de 1.8V-3.3V según color)</li>
+                    </ul>
+                </div>
+
+                <div class="image-container">
+                    <img src="1.PNG" alt="Simbolo del Diodo">
+                    <div class="image-caption"><strong>Figura 1:</strong> Símbolo del diodo y estructura física</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: PRÁCTICA 0.1 -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">PRÁCTICA 0.1</span>
+                <h2>Diodo en Polarización Directa con DC</h2>
+                
+                <div class="practice-box">
+                    <p><strong>Objetivo:</strong> Verificar el comportamiento del diodo en polarización directa</p>
+                    
+                    <h4>Materiales:</h4>
+                    <ul>
+                        <li>Fuente de DC ajustable (0-12V)</li>
+                        <li>Diodo 1N4007</li>
+                        <li>Resistencia 330Ω, 1kΩ</li>
+                        <li>Multímetro</li>
+                        <li>Protoboard</li>
+                    </ul>
+
+                    <h4>Circuito:</h4>
+                    <p>Fuente DC (+) → Ánodo del diodo → Cátodo del diodo → Resistencia → Fuente DC (-)</p>
+                </div>
+
+                <div class="image-container">
+                    <img src="2.PNG" alt="Diodo en Directa DC">
+                    <div class="image-caption"><strong>Figura 2:</strong> Circuito de diodo en polarización directa con fuente DC</div>
+                </div>
+
+                <div class="practice-box">
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Arme el circuito según la Figura 2</li>
+                        <li>Ajuste la fuente a 3V, 5V, 9V y 12V</li>
+                        <li>Mida el voltaje en el diodo (VD) y en la resistencia (VR)</li>
+                        <li>Calcule la corriente: I = VR / R</li>
+                        <li>Verifique que VD ≈ 0.7V (caída en el diodo)</li>
+                    </ol>
+
+                    <div class="formula">
+                        I = (Vfuente - 0.7V) / R
+                    </div>
+
+                    <table>
+                        <tr>
+                            <th>Vfuente</th>
+                            <th>VD medido</th>
+                            <th>VR medido</th>
+                            <th>I calculada</th>
+                        </tr>
+                        <tr><td>3V</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td></tr>
+                        <tr><td>5V</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td></tr>
+                        <tr><td>9V</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td></tr>
+                        <tr><td>12V</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: PRÁCTICA 0.2 -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">PRÁCTICA 0.2</span>
+                <h2>Diodo en Polarización Inversa con DC</h2>
+                
+                <div class="practice-box">
+                    <p><strong>Objetivo:</strong> Verificar el comportamiento del diodo en polarización inversa</p>
+                    <h4>Circuito:</h4>
+                    <p>Fuente DC (+) → Cátodo del diodo → Ánodo del diodo → Resistencia → Fuente DC (-)</p>
+                </div>
+
+                <div class="image-container">
+                    <img src="3.PNG" alt="Diodo en Inversa DC">
+                    <div class="image-caption"><strong>Figura 3:</strong> Circuito de diodo en polarización inversa con fuente DC</div>
+                </div>
+
+                <div class="practice-box">
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Invierta la conexión del diodo (Figura 3)</li>
+                        <li>Ajuste la fuente a 3V, 6V, 9V y 12V</li>
+                        <li>Mida el voltaje en el diodo y en la resistencia</li>
+                        <li>Verifique que la corriente es casi nula (μA)</li>
+                        <li>Observe que todo el voltaje cae en el diodo</li>
+                    </ol>
+
+                    <table>
+                        <tr>
+                            <th>Vfuente</th>
+                            <th>VD medido</th>
+                            <th>VR medido</th>
+                            <th>I calculada</th>
+                        </tr>
+                        <tr><td>3V</td><td>_____ V</td><td>_____ V</td><td>_____ μA</td></tr>
+                        <tr><td>6V</td><td>_____ V</td><td>_____ V</td><td>_____ μA</td></tr>
+                        <tr><td>9V</td><td>_____ V</td><td>_____ V</td><td>_____ μA</td></tr>
+                        <tr><td>12V</td><td>_____ V</td><td>_____ V</td><td>_____ μA</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: PRÁCTICA 0.3 LED -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">PRÁCTICA 0.3</span>
+                <h2>Polarización de un LED</h2>
+                
+                <div class="theory-box">
+                    <p><strong>Objetivo:</strong> Polarizar correctamente un LED y calcular su resistencia limitadora</p>
+                    
+                    <h4>Características del LED:</h4>
+                    <ul>
+                        <li><strong>LED Rojo:</strong> VF ≈ 1.8V - 2.0V</li>
+                        <li><strong>LED Verde:</strong> VF ≈ 2.0V - 2.2V</li>
+                        <li><strong>LED Azul/Blanco:</strong> VF ≈ 3.0V - 3.3V</li>
+                        <li><strong>Corriente nominal:</strong> 10-20 mA</li>
+                    </ul>
+
+                    <div class="formula">
+                        R = (Vfuente - VLED) / ILED
+                    </div>
+                </div>
+
+                <div class="image-container">
+                    <img src="4.PNG" alt="Circuito LED">
+                    <div class="image-caption"><strong>Figura 4:</strong> Circuito de polarización de LED con resistencia limitadora</div>
+                </div>
+
+                <div class="practice-box">
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Identifique el ánodo (pata larga) y cátodo (pata corta) del LED</li>
+                        <li>Para Vfuente = 9V y LED rojo (VF=2V), calcule R para I=15mA:</li>
+                    </ol>
+
+                    <div class="formula">
+                        R = (9V - 2V) / 0.015A = 467Ω → Use 470Ω
+                    </div>
+
+                    <ol start="3">
+                        <li>Arme el circuito con la resistencia calculada</li>
+                        <li>Mida VF del LED y la corriente</li>
+                        <li>Pruebe con diferentes resistencias (220Ω, 330Ω, 1kΩ)</li>
+                        <li>Observe el cambio en la intensidad luminosa</li>
+                        <li><strong>¡PRECAUCIÓN!</strong> No conecte el LED sin resistencia</li>
+                    </ol>
+
+                    <table>
+                        <tr>
+                            <th>Resistencia</th>
+                            <th>VLED</th>
+                            <th>VR</th>
+                            <th>ILED</th>
+                            <th>Intensidad</th>
+                        </tr>
+                        <tr><td>220Ω</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td><td>_____</td></tr>
+                        <tr><td>470Ω</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td><td>_____</td></tr>
+                        <tr><td>1kΩ</td><td>_____ V</td><td>_____ V</td><td>_____ mA</td><td>_____</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: MEDIA ONDA -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 1</span>
+                <h2>RECTIFICACIÓN DE MEDIA ONDA</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>La rectificación de media onda es el proceso más básico de conversión de corriente alterna (AC) a corriente continua (DC). Utiliza un solo diodo que permite el paso de la corriente solo durante el semiciclo positivo de la señal de entrada.</p>
+                    
+                    <h4>Características:</h4>
+                    <ul>
+                        <li><strong>Eficiencia:</strong> 40.6%</li>
+                        <li><strong>Frecuencia de rizado:</strong> Igual a la frecuencia de entrada (50 Hz)</li>
+                        <li><strong>Voltaje promedio de salida:</strong> Vdc = Vp/π ≈ 0.318 × Vp</li>
+                        <li><strong>Voltaje pico de salida:</strong> Vp(salida) = Vp(entrada) - 0.7V (caída en el diodo)</li>
+                    </ul>
+                </div>
+
+                <div class="image-container">
+                    <img src="5.PNG" alt="Circuito de Media Onda">
+                    <div class="image-caption"><strong>Figura 5:</strong> Circuito rectificador de media onda y forma de onda</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 1</h3>
+                    <p><strong>Objetivo:</strong> Construir y analizar un rectificador de media onda</p>
+                    
+                    <h4>Materiales:</h4>
+                    <ul>
+                        <li>Transformador 220V/12V</li>
+                        <li>Diodo 1N4007</li>
+                        <li>Resistencia de carga 1kΩ</li>
+                        <li>Osciloscopio</li>
+                        <li>Multímetro</li>
+                    </ul>
+
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Conecte el circuito según la Figura 5</li>
+                        <li>Mida el voltaje AC en el secundario del transformador</li>
+                        <li>Observe la forma de onda en el osciloscopio</li>
+                        <li>Mida el voltaje DC en la carga</li>
+                        <li>Calcule el voltaje teórico y compárelo con el medido</li>
+                    </ol>
+
+                    <div class="formula">
+                        Vdc(teórico) = (Vp - 0.7) / π<br>
+                        Vp = Vrms × √2
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: ONDA COMPLETA -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 2</span>
+                <h2>RECTIFICACIÓN DE ONDA COMPLETA</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>La rectificación de onda completa convierte ambos semiciclos de la señal AC en DC pulsatoria. Existen dos configuraciones principales:</p>
+                    
+                    <h4>a) Con transformador con derivación central (CT):</h4>
+                    <ul>
+                        <li>Utiliza 2 diodos</li>
+                        <li>Vdc = 2Vp/π ≈ 0.636 × Vp</li>
+                        <li>Eficiencia: 81.2%</li>
+                    </ul>
+
+                    <h4>b) Puente rectificador (Bridge):</h4>
+                    <ul>
+                        <li>Utiliza 4 diodos</li>
+                        <li>Vdc = 2(Vp - 1.4)/π</li>
+                        <li>Frecuencia de rizado: 2 × frecuencia de entrada (100 Hz)</li>
+                    </ul>
+                </div>
+
+                <div class="image-container">
+                    <img src="6.PNG" alt="Circuito de Onda Completa">
+                    <div class="image-caption"><strong>Figura 6:</strong> Circuito rectificador de onda completa (puente)</div>
+                </div>
+
+                <div class="image-container">
+                    <img src="7.PNG" alt="Formas de Onda">
+                    <div class="image-caption"><strong>Figura 7:</strong> Formas de onda comparativas</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 2</h3>
+                    <p><strong>Objetivo:</strong> Implementar un rectificador de onda completa con puente de diodos</p>
+                    
+                    <h4>Materiales:</h4>
+                    <ul>
+                        <li>Transformador 220V/12V</li>
+                        <li>4 diodos 1N4007</li>
+                        <li>Resistencia de carga 1kΩ</li>
+                        <li>Osciloscopio de 2 canales</li>
+                    </ul>
+
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Arme el circuito puente rectificador</li>
+                        <li>Verifique la polaridad de los diodos</li>
+                        <li>Mida Vrms en el secundario</li>
+                        <li>Observe simultáneamente la entrada y salida en el osciloscopio</li>
+                        <li>Mida Vdc y compare con el valor teórico</li>
+                        <li>Calcule el factor de rizado</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: FILTRO CAPACITOR -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 3</span>
+                <h2>FILTRO A CAPACITOR</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>El capacitor se conecta en paralelo con la carga para suavizar la señal rectificada, almacenando energía durante los picos y liberándola durante los valles.</p>
+
+                    <h4>Fórmulas importantes:</h4>
+                    <div class="formula">
+                        Vr(pp) = I / (f × C)<br><br>
+                        Vdc = Vp - Vr(pp)/2<br><br>
+                        Factor de rizado: r = Vr(pp) / Vdc × 100%
+                    </div>
+
+                    <p><strong>Donde:</strong></p>
+                    <ul>
+                        <li>Vr(pp): Voltaje de rizado pico a pico</li>
+                        <li>I: Corriente de carga</li>
+                        <li>f: Frecuencia (50 Hz media onda, 100 Hz onda completa)</li>
+                        <li>C: Capacitancia del filtro</li>
+                    </ul>
+                </div>
+
+                <div class="image-container">
+                    <img src="8.PNG" alt="Filtro con Capacitor">
+                    <div class="image-caption"><strong>Figura 8:</strong> Circuito con filtro a capacitor y forma de onda filtrada</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 3</h3>
+                    <p><strong>Objetivo:</strong> Analizar el efecto del capacitor en el rizado</p>
+                    
+                    <h4>Materiales adicionales:</h4>
+                    <ul>
+                        <li>Capacitores electrolíticos: 100μF, 470μF, 1000μF (25V)</li>
+                    </ul>
+
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Conecte el capacitor de 100μF en paralelo con la carga</li>
+                        <li>Mida el voltaje de rizado (Vr(pp))</li>
+                        <li>Repita con 470μF y 1000μF</li>
+                        <li>Registre los valores en la tabla:</li>
+                    </ol>
+
+                    <table>
+                        <tr>
+                            <th>Capacitor</th>
+                            <th>Vdc medido</th>
+                            <th>Vr(pp) medido</th>
+                            <th>% Rizado</th>
+                        </tr>
+                        <tr><td>100μF</td><td>_____ V</td><td>_____ V</td><td>_____ %</td></tr>
+                        <tr><td>470μF</td><td>_____ V</td><td>_____ V</td><td>_____ %</td></tr>
+                        <tr><td>1000μF</td><td>_____ V</td><td>_____ V</td><td>_____ %</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: FUENTE NO REGULADA -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 4</span>
+                <h2>FUENTE NO REGULADA</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>Una fuente no regulada consiste en: transformador + rectificador + filtro. El voltaje de salida varía con los cambios en:</p>
+                    <ul>
+                        <li>Voltaje de línea (AC)</li>
+                        <li>Corriente de carga</li>
+                        <li>Temperatura</li>
+                    </ul>
+
+                    <h4>Regulación de voltaje:</h4>
+                    <div class="formula">
+                        %Regulación = [(Vsin carga - Vcon carga) / Vcon carga] × 100%
+                    </div>
+                </div>
+
+                <div class="image-container">
+                    <img src="9.PNG" alt="Fuente No Regulada">
+                    <div class="image-caption"><strong>Figura 9:</strong> Diagrama completo de fuente no regulada</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 4</h3>
+                    <p><strong>Objetivo:</strong> Caracterizar una fuente no regulada</p>
+                    
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Construya la fuente: Transformador 220V/12V + Puente + C=1000μF</li>
+                        <li>Mida el voltaje sin carga (Vsin carga)</li>
+                        <li>Conecte cargas de: 1kΩ, 470Ω, 220Ω, 100Ω</li>
+                        <li>Mida el voltaje en cada caso</li>
+                        <li>Calcule la regulación de voltaje</li>
+                    </ol>
+
+                    <table>
+                        <tr>
+                            <th>Resistencia</th>
+                            <th>Corriente</th>
+                            <th>Voltaje</th>
+                            <th>Potencia</th>
+                        </tr>
+                        <tr><td>Sin carga</td><td>0 mA</td><td>_____ V</td><td>0 W</td></tr>
+                        <tr><td>1kΩ</td><td>_____ mA</td><td>_____ V</td><td>_____ W</td></tr>
+                        <tr><td>470Ω</td><td>_____ mA</td><td>_____ V</td><td>_____ W</td></tr>
+                        <tr><td>220Ω</td><td>_____ mA</td><td>_____ V</td><td>_____ W</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: REGULADORES -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 5</span>
+                <h2>REGULADORES DE TENSIÓN SERIE 78XX Y 79XX</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>Los reguladores de la serie 78XX (positivos) y 79XX (negativos) son circuitos integrados que mantienen un voltaje de salida constante independientemente de las variaciones en:</p>
+                    <ul>
+                        <li>Voltaje de entrada</li>
+                        <li>Corriente de carga</li>
+                        <li>Temperatura</li>
+                    </ul>
+
+                    <h4>Características principales:</h4>
+                    <table>
+                        <tr>
+                            <th>Serie</th>
+                            <th>Polaridad</th>
+                            <th>Voltajes disponibles</th>
+                            <th>Corriente máx</th>
+                        </tr>
+                        <tr><td>78XX</td><td>Positiva</td><td>5, 6, 8, 9, 10, 12, 15, 18, 24V</td><td>1A - 1.5A</td></tr>
+                        <tr><td>79XX</td><td>Negativa</td><td>5, 6, 8, 9, 10, 12, 15, 18, 24V</td><td>1A - 1.5A</td></tr>
+                    </table>
+
+                    <h4>Consideraciones de diseño:</h4>
+                    <ul>
+                        <li><strong>Voltaje de entrada mínimo:</strong> Vin(min) = Vout + 2V (dropout voltage)</li>
+                        <li><strong>Capacitor de entrada:</strong> 0.33μF (cerca del regulador)</li>
+                        <li><strong>Capacitor de salida:</strong> 0.1μF (mejora transitorios)</li>
+                        <li><strong>Disipación de potencia:</strong> Pd = (Vin - Vout) × Iout</li>
+                    </ul>
+                </div>
+
+                <div class="image-container">
+                    <img src="10.PNG" alt="Reguladores 78XX y 79XX">
+                    <div class="image-caption"><strong>Figura 10:</strong> Configuración básica de reguladores 78XX y 79XX</div>
+                </div>
+
+                <div class="image-container">
+                    <img src="11.PNG" alt="Pinout Reguladores">
+                    <div class="image-caption"><strong>Figura 11:</strong> Distribución de pines TO-220</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 5</h3>
+                    <p><strong>Objetivo:</strong> Probar reguladores 7805 y 7812</p>
+                    
+                    <h4>Materiales:</h4>
+                    <ul>
+                        <li>Reguladores 7805, 7812</li>
+                        <li>Capacitores: 0.33μF, 0.1μF, 10μF</li>
+                        <li>Disipador de calor</li>
+                    </ul>
+
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Conecte el circuito del 7805 con Vin = 9V</li>
+                        <li>Mida Vout sin carga y con carga de 100Ω</li>
+                        <li>Repita con el 7812 (Vin = 15V)</li>
+                        <li>Mida la temperatura del regulador</li>
+                        <li>Calcule la potencia disipada</li>
+                    </ol>
+
+                    <div class="formula">
+                        Pd(7805) = (9V - 5V) × I<br>
+                        Pd(7812) = (15V - 12V) × I
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: FUENTE 12V -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 6</span>
+                <h2>FUENTE REGULADA DE 12V</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>Fuente completa que incluye todas las etapas: transformación, rectificación, filtrado y regulación.</p>
+
+                    <h4>Diseño paso a paso:</h4>
+                    <ol>
+                        <li><strong>Transformador:</strong> 220V/15V (para tener margen)</li>
+                        <li><strong>Rectificador:</strong> Puente de diodos 1N4007</li>
+                        <li><strong>Filtro:</strong> C = I / (f × Vr) → Para I=1A, Vr=1V: C ≈ 8333μF (usar 10000μF)</li>
+                        <li><strong>Regulador:</strong> 7812</li>
+                        <li><strong>Capacitores:</strong> 0.33μF entrada, 0.1μF salida</li>
+                    </ol>
+                </div>
+
+                <div class="image-container">
+                    <img src="12.PNG" alt="Fuente 12V">
+                    <div class="image-caption"><strong>Figura 12:</strong> Diagrama completo de fuente regulada de 12V</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 6</h3>
+                    <p><strong>Objetivo:</strong> Construir una fuente de 12V @ 1A</p>
+                    
+                    <h4>Lista de materiales:</h4>
+                    <ul>
+                        <li>Transformador 220V/15V 1.5A</li>
+                        <li>Puente rectificador 2A o 4 diodos 1N4007</li>
+                        <li>Capacitor 10000μF/25V</li>
+                        <li>Regulador 7812</li>
+                        <li>Capacitores 0.33μF y 0.1μF</li>
+                        <li>Fusible 2A</li>
+                        <li>LED indicador con resistencia 1kΩ</li>
+                        <li>Disipador para 7812</li>
+                    </ul>
+
+                    <h4>Procedimiento de prueba:</h4>
+                    <ol>
+                        <li>Verifique polaridades antes de energizar</li>
+                        <li>Mida voltaje en cada etapa</li>
+                        <li>Pruebe con cargas de 120Ω, 60Ω, 40Ω, 24Ω</li>
+                        <li>Verifique regulación: %Reg = [(Vvacío - Vcarga)/Vcarga] × 100</li>
+                        <li>Mida rizado en la salida</li>
+                    </ol>
+
+                    <table>
+                        <tr>
+                            <th>Punto de medición</th>
+                            <th>Voltaje esperado</th>
+                            <th>Voltaje medido</th>
+                        </tr>
+                        <tr><td>Secundario transformador</td><td>~15V AC</td><td>_____ V</td></tr>
+                        <tr><td>Después del puente (sin C)</td><td>~20V DC pulsatoria</td><td>_____ V</td></tr>
+                        <tr><td>Después del filtro</td><td>~20-21V DC</td><td>_____ V</td></tr>
+                        <tr><td>Salida 7812</td><td>12V DC</td><td>_____ V</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: FUENTE 12V Y 5V -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 7</span>
+                <h2>FUENTE REGULADA DE 12V Y 5V</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>Fuente dual que proporciona dos voltajes regulados simultáneamente. Se puede implementar de dos formas:</p>
+
+                    <h4>Opción A: Dos reguladores en paralelo</h4>
+                    <ul>
+                        <li>Cada regulador tiene su propia entrada desde el filtro</li>
+                        <li>Más simple pero menos eficiente</li>
+                    </ul>
+
+                    <h4>Opción B: Reguladores en cascada</h4>
+                    <ul>
+                        <li>El 7805 se alimenta desde la salida del 7812</li>
+                        <li>Menor disipación en el 7805</li>
+                        <li>El 7805 requiere Vin ≥ 7V</li>
+                    </ul>
+                </div>
+
+                <div class="image-container">
+                    <img src="13.PNG" alt="Fuente 12V y 5V">
+                    <div class="image-caption"><strong>Figura 13:</strong> Fuente regulada dual 12V y 5V</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 7</h3>
+                    <p><strong>Objetivo:</strong> Implementar fuente dual 12V/5V</p>
+                    
+                    <h4>Configuración recomendada:</h4>
+                    <p><strong>Cascada:</strong> Transformador → Puente → Filtro → 7812 → 7805</p>
+
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Construya la fuente de 12V primero</li>
+                        <li>Agregue el 7805 alimentado desde los 12V</li>
+                        <li>Añada capacitores de desacople en cada regulador</li>
+                        <li>Pruebe ambas salidas independientemente</li>
+                        <li>Pruebe cargando ambas salidas simultáneamente</li>
+                    </ol>
+
+                    <h4>Consideraciones:</h4>
+                    <ul>
+                        <li>Corriente máxima total limitada por el transformador</li>
+                        <li>El 7812 disipa: P = (Vfiltro - 12) × (I12 + I5)</li>
+                        <li>El 7805 disipa: P = (12 - 5) × I5 = 7 × I5</li>
+                    </ul>
+
+                    <table>
+                        <tr>
+                            <th>Condición</th>
+                            <th>Salida 12V</th>
+                            <th>Salida 5V</th>
+                        </tr>
+                        <tr><td>Sin carga</td><td>_____ V</td><td>_____ V</td></tr>
+                        <tr><td>I12 = 500mA, I5 = 0</td><td>_____ V</td><td>_____ V</td></tr>
+                        <tr><td>I12 = 0, I5 = 500mA</td><td>_____ V</td><td>_____ V</td></tr>
+                        <tr><td>I12 = 500mA, I5 = 500mA</td><td>_____ V</td><td>_____ V</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: FUENTE SIMÉTRICA -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">SECCIÓN 8</span>
+                <h2>FUENTE REGULADA SIMÉTRICA ±12V, ±5V</h2>
+                
+                <div class="theory-box">
+                    <h3>Fundamento Teórico</h3>
+                    <p>Las fuentes simétricas proporcionan voltajes positivos y negativos respecto a tierra. Esenciales para:</p>
+                    <ul>
+                        <li>Amplificadores operacionales</li>
+                        <li>Circuitos de audio</li>
+                        <li>Instrumentación</li>
+                    </ul>
+
+                    <h4>Configuración:</h4>
+                    <ul>
+                        <li><strong>Transformador con CT (derivación central):</strong> 220V/12V-0-12V</li>
+                        <li><strong>Rectificación:</strong> Dos puentes o configuración con 4 diodos</li>
+                        <li><strong>Regulación positiva:</strong> 7812, 7805</li>
+                        <li><strong>Regulación negativa:</strong> 7912, 7905</li>
+                    </ul>
+
+                    <div class="formula">
+                        Vout(+) = +12V, +5V<br>
+                        Vout(-) = -12V, -5V<br>
+                        Tierra = 0V (referencia)
+                    </div>
+                </div>
+
+                <div class="image-container">
+                    <img src="14.PNG" alt="Fuente Simétrica">
+                    <div class="image-caption"><strong>Figura 14:</strong> Fuente regulada simétrica completa</div>
+                </div>
+
+                <div class="image-container">
+                    <img src="15.PNG" alt="Transformador CT">
+                    <div class="image-caption"><strong>Figura 15:</strong> Configuración con transformador con derivación central</div>
+                </div>
+
+                <div class="practice-box">
+                    <h3>Práctica Guiada 8</h3>
+                    <p><strong>Objetivo:</strong> Construir fuente simétrica ±12V y ±5V</p>
+                    
+                    <h4>Materiales:</h4>
+                    <ul>
+                        <li>Transformador 220V/12V-0-12V 2A</li>
+                        <li>2 puentes rectificadores 2A (o 8 diodos 1N4007)</li>
+                        <li>Reguladores: 7812, 7805, 7912, 7905</li>
+                        <li>Capacitores: 2 × 4700μF/25V, 2 × 1000μF/16V</li>
+                        <li>Capacitores 0.33μF y 0.1μF (8 de cada)</li>
+                        <li>Disipadores grandes (4 unidades)</li>
+                    </ul>
+
+                    <h4>Procedimiento:</h4>
+                    <ol>
+                        <li>Conecte el transformador con CT a tierra</li>
+                        <li>Arme el lado positivo (+12V → 7812 → 7805)</li>
+                        <li>Arme el lado negativo (-12V → 7912 → 7905)</li>
+                        <li>Verifique que las tierras estén conectadas</li>
+                        <li>Pruebe cada salida por separado</li>
+                        <li>Verifique simetría: |+V| ≈ |-V|</li>
+                    </ol>
+
+                    <h4>Pruebas de verificación:</h4>
+                    <table>
+                        <tr>
+                            <th>Salida</th>
+                            <th>Sin carga</th>
+                            <th>Con carga 100Ω</th>
+                            <th>Rizado</th>
+                        </tr>
+                        <tr><td>+12V</td><td>_____ V</td><td>_____ V</td><td>_____ mV</td></tr>
+                        <tr><td>-12V</td><td>_____ V</td><td>_____ V</td><td>_____ mV</td></tr>
+                        <tr><td>+5V</td><td>_____ V</td><td>_____ V</td><td>_____ mV</td></tr>
+                        <tr><td>-5V</td><td>_____ V</td><td>_____ V</td><td>_____ mV</td></tr>
+                    </table>
+
+                    <h4>Verificación de simetría:</h4>
+                    <div class="formula">
+                        Diferencia +12V/-12V = |12| - |-12| = _____ V<br>
+                        Diferencia +5V/-5V = |5| - |-5| = _____ V<br>
+                        %Asimetría = (Diferencia / Valor nominal) × 100 = _____ %
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: PROYECTO FINAL -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">PROYECTO FINAL</span>
+                <h2>PROYECTO FINAL INTEGRADOR</h2>
+                
+                <div class="practice-box">
+                    <h3>Diseño de Fuente Universal</h3>
+                    <p><strong>Especificaciones:</strong></p>
+                    <ul>
+                        <li>Entrada: 220V AC, 50 Hz</li>
+                        <li>Salidas: +12V@1A, +5V@1A, -12V@0.5A, -5V@0.5A</li>
+                        <li>Rizado máximo: 10mV en todas las salidas</li>
+                        <li>Regulación: < 1%</li>
+                        <li>Protecciones: Fusibles, LED indicadores</li>
+                    </ul>
+
+                    <h4>Entregables:</h4>
+                    <ol>
+                        <li>Diagrama esquemático completo</li>
+                        <li>Lista de materiales con especificaciones</li>
+                        <li>Diseño de PCB o protoboard</li>
+                        <li>Pruebas de funcionamiento</li>
+                        <li>Mediciones de regulación y rizado</li>
+                        <li>Cálculos de disipación de potencia</li>
+                        <li>Selección de disipadores</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: ANEXOS -->
+        <div class="slide">
+            <div class="content-wrapper">
+                <span class="section-badge">ANEXOS</span>
+                <h2>TABLA DE REGULADORES COMUNES</h2>
+                
+                <div class="theory-box">
+                    <table>
+                        <tr>
+                            <th>Número</th>
+                            <th>Voltaje</th>
+                            <th>Número</th>
+                            <th>Voltaje</th>
+                        </tr>
+                        <tr><td>7805/7905</td><td>±5V</td><td>7815/7915</td><td>±15V</td></tr>
+                        <tr><td>7806/7906</td><td>±6V</td><td>7818/7918</td><td>±18V</td></tr>
+                        <tr><td>7808/7908</td><td>±8V</td><td>7824/7924</td><td>±24V</td></tr>
+                        <tr><td>7809/7909</td><td>±9V</td><td>78L05</td><td>+5V (100mA)</td></tr>
+                        <tr><td>7810/7910</td><td>±10V</td><td>78L12</td><td>+12V (100mA)</td></tr>
+                        <tr><td>7812/7912</td><td>±12V</td><td>LM317</td><td>Ajustable 1.25-37V</td></tr>
+                    </table>
+                </div>
+
+                
+
+                <footer>
+                    <p><strong>Guía de Laboratorio - Fuentes de Alimentación</strong></p>
+                    <p>Red: 220V AC, 50 Hz | Transformadores: 220V/12V y 220V/12V-0-12V</p>
+                    <p style="margin-top: 10px; color: #e74c3c;">⚠️ Recuerde siempre trabajar con precaución al manejar voltajes de red</p>
+                </footer>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="nav-button prev-btn" onclick="changeSlide(-1)">❮</button>
+    <button class="nav-button next-btn" onclick="changeSlide(1)">❯</button>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Update counter
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Scroll to top
+            document.querySelector('.slide.active').scrollTop = 0;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide < 0) {
+                currentSlide = 0;
+            } else if (currentSlide >= totalSlides) {
+                currentSlide = totalSlides - 1;
+            }
+            
+            updateSlide();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                changeSlide(1);
+            }
+            if (touchEndX > touchStartX + 50) {
+                changeSlide(-1);
+            }
+        }
+
+        // Initialize
+        updateSlide();
+    </script>
+</body>
+</html>
